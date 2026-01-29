@@ -1,8 +1,8 @@
 # KI-Assistent Desktop App - Uni Mainz
 
-**WICHTIGER HINWEIS: Dies ist eine sehr frühe Testversion zur Überprüfung der Machbarkeit und Funktionalität.**
+**WICHTIGER HINWEIS: Dies ist eine sehr Konzept zur Überprüfung der Machbarkeit und Funktionalität.**
 
-Eine benutzerfreundliche Desktop-Anwendung für die Nutzung der KI-Services der Johannes Gutenberg-Universität Mainz. Die App bietet vorgefertigte Prompts für häufige Aufgaben und unterstützt verschiedene Dateiformate.
+Eine benutzerfreundliche Web-Anwendung für die Nutzung der KI-Services der Johannes Gutenberg-Universität Mainz. Die Webseite bietet vorgefertigte Prompts für häufige Aufgaben und unterstützt verschiedene Dateiformate.
 
 ## Features
 
