@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KI-Assistent - Uni Mainz</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="logger.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="title-section">
+                <img src="Gehin_ganz_logo.png" alt="Logo" class="logo" id="logoImg">
+                <div class="title-text">
+                    <h1>KI-Assistent</h1>
+                    <p>Uni Mainz - Einfach und schnell</p>
+                </div>
+            </div>
+            <button class="settings-btn" onclick="showSettingsMenu()">⚙️ Hilfe</button>
+        </div>
+
+        <!-- Alert Area -->
+        <div id="alertArea" class="alert"></div>
+
+        <!-- Agent Selection -->
+        <div class="section">
+            <div class="section-title">🎯 Was soll die KI für Sie tun?</div>
+            <div class="agent-selection">
+                <select id="agentSelect" class="agent-select" onchange="onAgentChange()">
+                    <option value="">Bitte wählen Sie eine Aufgabe...</option>
+                    <option value="summary">📝 Text zusammenfassen</option>
+                    <option value="translate">🌍 Text übersetzen</option>
+                    <option value="email">✉️ E-Mail schreiben</option>
+                    <option value="analyze">📊 Daten analysieren</option>
+                    <option value="research">🔍 Thema erforschen</option>
+                    <option value="code">💻 Code erstellen</option>
+                </select>
+                <button class="example-btn" onclick="showExample()">💡 Beispiel</button>
+            </div>
+
+            <!-- Options Container -->
+            <div id="optionsContainer" class="options-container"></div>
+        </div>
+
+        <!-- Input Section -->
+        <div class="section">
+            <div class="section-title">💬 Ihr Text</div>
+            <div class="input-section">
+                <div id="fileDisplay" class="file-display"></div>
+                <textarea id="inputArea" class="input-area placeholder"
+                          onfocus="removePlaceholder()"
+                          onblur="addPlaceholder()"></textarea>
+            </div>
+        </div>
+
+        <!-- Button Group -->
+        <div class="button-group">
+            <button id="processBtn" class="btn btn-primary" onclick="processText()">🚀 Starten</button>
+            <button class="btn btn-secondary" onclick="clearAll()">🗑️ Leeren</button>
+            <button class="btn btn-info" onclick="uploadFile()">📁 Datei laden</button>
+            <button class="btn btn-info" onclick="saveResult()">💾 Speichern</button>
+            <button class="btn btn-info" onclick="copyResult()">📋 Kopieren</button>
+        </div>
+
+        <!-- Progress Bar -->
+        <div id="progressContainer" class="progress-container">
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+        </div>
+
+        <!-- Result Section -->
+        <div class="section">
+            <div class="section-title">📋 Ergebnis</div>
+            <textarea id="resultArea" class="result-area" readonly></textarea>
+        </div>
+    </div>
+
+    <!-- API Key Modal -->
+    <div id="apiKeyModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">API-Key eingeben</div>
+            <div class="modal-body">
+                <p>Willkommen beim KI-Assistenten!</p>
+                <p>Für die Nutzung benötigen Sie einen API-Key von ki-chat.uni-mainz.de</p>
+                <br>
+                <p><strong>So erhalten Sie Ihren API-Key:</strong></p>
+                <ol style="margin-left: 20px; line-height: 1.8;">
+                    <li>Öffnen Sie <a href="https://ki-chat.uni-mainz.de" target="_blank">https://ki-chat.uni-mainz.de</a></li>
+                    <li>Melden Sie sich mit Ihren Uni-Zugangsdaten an</li>
+                    <li>Gehen Sie zu: Avatar → Einstellungen → Konto</li>
+                    <li>Unter "API-Schlüssel" auf "Neuen Schlüssel erstellen" klicken</li>
+                    <li>Kopieren Sie den Key</li>
+                </ol>
+                <br>
+                <input type="password" id="apiKeyInput" class="modal-input" placeholder="Geben Sie Ihren API-Key ein...">
+            </div>
+            <div class="modal-buttons">
+                <button class="btn btn-secondary" onclick="closeApp()">Abbrechen</button>
+                <button class="btn btn-primary" onclick="saveApiKey()">Speichern</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">⚙️ Einstellungen</div>
+            <div class="modal-body">
+                <button class="btn btn-info" style="width: 100%; margin-bottom: 10px;" onclick="changeApiKey()">🔑 API-Key ändern</button>
+                <button class="btn btn-info" style="width: 100%;" onclick="showInfo()">ℹ️ Information</button>
+            </div>
+            <div class="modal-buttons">
+                <button class="btn btn-secondary" onclick="closeModal('settingsModal')">Schließen</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- File Input (Hidden) -->
+    <input type="file" id="fileInput" accept=".txt,.pdf,.docx" style="display: none;" onchange="handleFileUpload(event)" multiple>
+
+    <!-- Load JavaScript -->
+    <script src="logger.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

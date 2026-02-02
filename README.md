@@ -1,230 +1,218 @@
-# KI-Assistent Desktop App - Uni Mainz
+# KI-Assistent Web-Anwendung - JGU Mainz
 
-**WICHTIGER HINWEIS: Dies ist eine sehr Konzept zur Überprüfung der Machbarkeit und Funktionalität.**
+> **WICHTIGER HINWEIS:** Dies ist ein Konzept zur Überprüfung der Machbarkeit und Funktionalität.
 
-Eine benutzerfreundliche Web-Anwendung für die Nutzung der KI-Services der Johannes Gutenberg-Universität Mainz. Die Webseite bietet vorgefertigte Prompts für häufige Aufgaben und unterstützt verschiedene Dateiformate.
+## 🚀 Schnellstart
+
+1. **Proxy-Server starten** (Terminal 1):
+   ```bash
+   node proxy-server.js
+   ```
+
+2. **Live Server starten** (VSCode):
+   - Rechtsklick auf `JGU_Agenten.html` → "Open with Live Server"
+
+3. **App im Browser öffnen** - Automatisch oder manuell: http://localhost:5500/JGU_Agenten.html
+
+**Oder einfach:** Doppelklick auf `START_APP.bat` (Windows)
+
+➡️ **Wichtig:** Siehe [PROXY_ANLEITUNG.md](PROXY_ANLEITUNG.md) für Details zum CORS-Problem
+
+## Übersicht
+
+Eine benutzerfreundliche Web-Anwendung für die Nutzung der KI-Services der Johannes Gutenberg-Universität Mainz. Die Anwendung bietet vorgefertigte Prompts für häufige Aufgaben und **dynamische Modell-Auswahl** direkt von der API.
 
 ## Features
 
-### Vorgefertigte KI-Agenten
-- **Text zusammenfassen**: Automatische Erstellung strukturierter Zusammenfassungen
-- **Text übersetzen**: Professionelle Übersetzungen in 6 Sprachen (Deutsch, English, Français, Español, Italiano, Nederlands)
-- **E-Mail schreiben**: Verfassen professioneller E-Mails basierend auf Stichpunkten
-- **Daten analysieren**: Strukturierte Analyse von Daten mit Handlungsempfehlungen
-- **Thema erforschen**: Umfassende Research zu beliebigen Themen
-- **Code erstellen**: Entwicklung sauberen Codes in 7 Programmiersprachen
+###  Vorgefertigte KI-Agenten
+
+- **Text zusammenfassen** - Automatische Erstellung strukturierter Zusammenfassungen
+- **Text übersetzen** - Professionelle Übersetzungen in 6 Sprachen (Deutsch, English, Français, Español, Italiano, Nederlands)
+- **E-Mail schreiben** - Verfassen professioneller E-Mails basierend auf Stichpunkten
+- **Daten analysieren** - Strukturierte Analyse von Daten mit Handlungsempfehlungen
+- **Thema erforschen** - Umfassende Research zu beliebigen Themen
+- **Code erstellen** - Entwicklung sauberen Codes in 7 Programmiersprachen
 
 ### Datei-Support
-- **PDF-Dateien** (.pdf): Automatische Textextraktion
-- **Word-Dokumente** (.docx): Vollständige Inhaltsverarbeitung
-- **Textdateien** (.txt): Direkter Import
-- **Multi-Upload**: Bis zu 3 Dateien gleichzeitig verarbeiten
+
+- **PDF-Dateien** (.pdf) - Automatische Textextraktion
+- **Word-Dokumente** (.docx) - Vollständige Inhaltsverarbeitung
+- **Textdateien** (.txt) - Direkter Import
+- **Multi-Upload** - Bis zu 3 Dateien gleichzeitig verarbeiten
 
 ### Weitere Funktionen
-- **API-Key-Verwaltung**: Sichere lokale Speicherung
-- **Verlaufshistorie**: Automatische Speicherung der letzten 50 Ergebnisse
-- **Export-Funktionen**: Ergebnisse speichern oder kopieren
-- **Benutzerfreundliche GUI**: Intuitive Tkinter-Oberfläche
-- **Logo-Integration**: Uni Mainz Branding
 
-## Installation
+- **Dynamische Modell-Auswahl** - Automatisches Abrufen verfügbarer Modelle von der API
+- **Intelligente Modell-Kategorisierung** - Erkennt automatisch Code-, Reasoning-, Vision- und Standard-Modelle
+- **API-Key-Verwaltung** - Sichere lokale Speicherung (LocalStorage)
+- **Verlaufshistorie** - Automatische Speicherung der letzten 50 Ergebnisse
+- **Export-Funktionen** - Ergebnisse speichern oder kopieren
+- **Debug-Konsole** - Umfassendes Logging-System mit visueller Konsole (🐛 Button)
+- **Responsive Design** - Funktioniert auf Desktop und mobilen Geräten
+- **Logo-Integration** - Uni Mainz Branding
+
+## Installation & Setup
 
 ### Voraussetzungen
-- Python 3.7 oder höher
-- Zugang zu ki-chat.uni-mainz.de mit gültigen Uni-Zugangsdaten
 
-### Abhängigkeiten installieren
-```bash
-pip install tkinter requests PyPDF2 python-docx pillow
-```
+- **Node.js** (v14 oder höher) - [Download](https://nodejs.org/)
+- **Webserver** (VSCode Live Server, Python HTTP Server, oder ähnlich)
+- **Browser** (Chrome, Firefox, Edge)
+- **API-Key** von [ki-chat.uni-mainz.de](https://ki-chat.uni-mainz.de)
 
-### Repository klonen
-```bash
-git clone https://github.com/IhrUsername/JGU_Agenten.git
-cd JGU_Agenten
-```
+### Schritt-für-Schritt-Anleitung
 
-## Setup
+1. **Repository herunterladen/klonen**
+   ```bash
+   git clone <repository-url>
+   cd JGU_Verwaltungsagent
+   ```
 
-### 1. Logo hinzufügen (optional)
-Platzieren Sie die Datei `Gehin_ganz_logo.png` im Projektverzeichnis für das Uni-Logo.
+2. **CORS-Problem verstehen**
 
-### 2. API-Key erstellen
-1. Öffnen Sie https://ki-chat.uni-mainz.de
-2. Melden Sie sich mit Ihren Uni-Zugangsdaten an
-3. Gehen Sie zu den Einstellungen/API-Keys
-4. Erstellen Sie einen neuen API-Key
-5. Kopieren Sie den Key für die erste Nutzung
+   Die JGU API blockiert Browser-Anfragen von localhost. Daher benötigen Sie einen Proxy-Server.
 
-### 3. Anwendung starten
-```bash
-python ki_assistant.py
-```
+   ➡️ Siehe [PROXY_ANLEITUNG.md](PROXY_ANLEITUNG.md) für Details
+
+3. **Proxy-Server starten** (Terminal 1)
+   ```bash
+   node proxy-server.js
+   ```
+
+4. **Webserver starten** (Terminal 2)
+
+   **Option A - VSCode Live Server (empfohlen):**
+   - Rechtsklick auf `JGU_Agenten.html` → "Open with Live Server"
+
+   **Option B - Python:**
+   ```bash
+   python -m http.server 8000
+   # Dann öffnen: http://localhost:8000/JGU_Agenten.html
+   ```
+
+   **Option C - Node.js:**
+   ```bash
+   npx http-server
+   # Dann öffnen: http://localhost:8080/JGU_Agenten.html
+   ```
+
+5. **App im Browser öffnen**
+   - Mit Live Server: Öffnet automatisch
+   - Mit Python/Node.js: Siehe URLs oben
+
+6. **API-Key eingeben**
+   - Bei erstem Start öffnet sich ein Modal
+   - API-Key von [ki-chat.uni-mainz.de](https://ki-chat.uni-mainz.de) einfügen
+   - Wie man den Key bekommt: Avatar → Einstellungen → Konto → "Neuen Schlüssel erstellen"
+
+### Alternative: Start-Script (Windows)
+
+Doppelklick auf `START_APP.bat` startet automatisch:
+- Proxy-Server (Port 3000)
+- Python Webserver (Port 8000)
+- Browser mit der App
+
+Für VSCode Live Server Benutzer: `START_PROXY_ONLY.bat`
 
 ## Verwendung
 
-### Erste Schritte
-1. **Agent auswählen**: Wählen Sie die gewünschte Aufgabe aus der Dropdown-Liste
-2. **Text eingeben**: Beschreiben Sie Ihre Anfrage oder nutzen Sie die Beispiele
-3. **Dateien hochladen** (optional): Laden Sie bis zu 3 Dateien zur Verarbeitung hoch
-4. **Verarbeitung starten**: Klicken Sie auf "Starten"
-5. **Ergebnis nutzen**: Kopieren oder speichern Sie das Ergebnis
+1. **API-Key eingeben** (beim ersten Start)
+2. **Aufgabe auswählen** (z.B. "Text zusammenfassen")
+3. **Text eingeben** oder **Datei hochladen**
+4. **"Starten" klicken**
+5. **Ergebnis** erscheint nach 10-30 Sekunden
+6. **Optional:** Ergebnis kopieren oder speichern
 
-### Beispiel-Workflows
+### Debug-Konsole
 
-#### Text zusammenfassen
-```
-1. Agent: "Text zusammenfassen" auswählen
-2. PDF-Dokument hochladen oder Text einfügen
-3. Strukturierte Zusammenfassung erhalten
-```
+- **🐛 Button** unten rechts öffnet die Debug-Konsole
+- Zeigt alle API-Anfragen, Fehler und System-Logs
+- Hilfreich bei Problemen
+- Logs können exportiert werden (💾 Export)
 
-#### Code erstellen
-```
-1. Agent: "Code erstellen" auswählen
-2. Programmiersprache wählen (z.B. Python)
-3. Anforderungen beschreiben
-4. Dokumentierten Code erhalten
-```
+## Technische Anforderungen
 
-## Architektur
-
-### Hauptkomponenten
-- **`KIAssistentApp`**: Haupt-GUI-Klasse
-- **`APIKeyManager`**: Sichere API-Key-Verwaltung
-- **Agent-System**: Vorgefertigte Prompts für verschiedene Aufgaben
-- **File-Handler**: Multi-Format-Dateiverarbeitung
-
-### Unterstützte KI-Modelle
-- **Standard**: Nemotron Ultra 253B
-- **Reasoning**: Nemotron Ultra 253B (Reasoning)
-- **Vision**: Gemma3 27B
-- **Code**: Qwen2.5 Coder 32B
+- **Node.js** v14+ (für Proxy-Server)
+- **Moderner Browser** (Chrome, Firefox, Edge, Safari)
+- **Internetverbindung** für API-Zugriff
+- **Gültiger API-Key** von JGU Mainz
 
 ## Projektstruktur
+
 ```
-JGU_Agenten/
-├── ki_assistant.py          # Hauptanwendung
-├── README.md               # Diese Datei
-├── Gehin_ganz_logo.png     # Uni-Logo (optional)
-├── api_key.txt             # API-Key (wird automatisch erstellt)
-└── ki_historie.json        # Verlaufshistorie (wird automatisch erstellt)
+JGU_Verwaltungsagent/
+├── JGU_Agenten.html         # Haupt-HTML-Datei
+├── app.js                   # Hauptlogik (API-Calls, Agenten)
+├── styles.css               # Styling
+├── logger.js                # Debug-Logging-System
+├── logger.css               # Debug-Konsolen-Styling
+├── proxy-server.js          # CORS-Proxy-Server (Node.js)
+├── START_APP.bat            # Windows-Start-Script (beide Server)
+├── START_PROXY_ONLY.bat     # Windows-Start-Script (nur Proxy)
+├── PROXY_ANLEITUNG.md       # Detaillierte Proxy-Anleitung
+├── SERVER_ANLEITUNG.md      # Server-Setup-Anleitung
+└── README.md                # Diese Datei
 ```
-
-## Konfiguration
-
-### API-Einstellungen
-Die API-URL und verfügbare Modelle können in der `setup_config()` Methode angepasst werden:
-
-```python
-self.api_url = "https://ki-chat.uni-mainz.de"
-self.models = {
-    "Standard": "Nemotron Ultra 253B",
-    # weitere Modelle...
-}
-```
-
-### Agent-Prompts anpassen
-Neue Agenten oder geänderte Prompts können im `self.agents` Dictionary definiert werden.
-
-## Sicherheit
-
-- **Lokale API-Key-Speicherung**: Keys werden nur lokal in `api_key.txt` gespeichert
-- **Keine Datenübertragung**: Dateien werden nur zur KI gesendet, nicht extern gespeichert
-- **Uni-Integration**: Nutzt die offizielle KI-Infrastruktur der JGU
-
-## Fehlerbehebung
-
-### Häufige Probleme
-
-**"API-Key ungültig"**
-- Neuen API-Key auf ki-chat.uni-mainz.de erstellen
-- Über "Hilfe" → "API-Key ändern" aktualisieren
-
-**"Datei kann nicht gelesen werden"**
-- Unterstützte Formate: .txt, .pdf, .docx
-- Bei PDFs: Nur Text-PDFs, keine gescannten Bilder
-
-**"Verbindungsfehler"**
-- Internetverbindung prüfen
-- VPN-Verbindung zur Uni eventuell erforderlich
-
-## Mitwirken
-
-Verbesserungsvorschläge und Contributions sind willkommen.
-
-## Lizenz
-
-Dieses Projekt ist für die interne Nutzung an der Johannes Gutenberg-Universität Mainz entwickelt.
-
-## Support
-
-Bei Fragen oder Problemen gerne an mich wenden.
 
 ## Roadmap
 
-Geplante Features für zukünftige Versionen:
+### ✅ Abgeschlossen
 
-Erweiterte Export-Optionen: Speichern der Ergebnisse in verschiedenen Dateiformaten (PDF, DOCX, HTML, etc.) mit professioneller Formatierung und Metadaten
-Flexible Modell-Auswahl: Benutzer können zwischen verschiedenen KI-Modellen je nach Anforderung wählen, mit Performance-Indikatoren zur optimalen Auswahl (Aktuell ist Nemotron als Standard ausgewählt)
+- [x] Aktualisierung des Codes nach offizieller Dokumentation
+  - [KI-Chat API Nutzung](https://www.zdv.uni-mainz.de/ki-chat-api-nutzung/)
+  - [KI-Chat Agentic Coding](https://www.zdv.uni-mainz.de/ki-chat-agentic-coding/)
+- [x] Erstellung einer Testwebseite (offline) für Probezwecke
+- [x] Dynamische Modell-Auswahl von der API
+- [x] Debug-Logging-System
+- [x] CORS-Proxy-Lösung
 
-WhisperAI Integration: Automatische Transkription von Audio-Dateien und Erstellung von strukturierten Protokollen
-Websuche-Integration: Einbindung aktueller Informationen aus dem Internet bzw. Nutzung der vorhanden Websuche
-Automatische Updates: Benutzer können die Software automatisch aktualisieren, ohne den Code erneut in eine .exe-Datei umwandeln zu müssen. 
+### 🔜 Nächste Schritte
 
-Langfristig - Universitätsspezifische Features
+- [ ] Download der Antworten als Word oder PDF Dokument (Umwandlung von Markdown in passende Formate)
+- [ ] Verbesserte PDF/DOCX-Datei-Verarbeitung (aktuell nur Text)
+- [ ] Streaming-Support für schnellere Antworten
+- [ ] Dark Mode
+- [ ] Mehrere Konversationen/Tabs
 
-**Für Studierende**
+## Troubleshooting
 
-Literaturverzeichnis-Generator: Automatische Zitationserstellung aus PDFs
-Prüfungsvorbereitung: Karteikarten und Lernzusammenfassungen aus Vorlesungsunterlagen
-Thesis-Assistent: Strukturierung und Gliederung von Abschlussarbeiten
-Vorlesungsnotizen-Optimierung: Aufbereitung handschriftlicher Notizen
+### CORS-Fehler trotz Proxy
 
-**Für Forschung**
+- ✅ Proxy läuft? (`node proxy-server.js`)
+- ✅ `app.js` verwendet `http://localhost:3000/api`?
+- ✅ Browser-Cache geleert? (Strg + Shift + R)
 
-Datenanalyse-Assistent: Integration mit pandas/matplotlib für statistische Auswertungen
-Paper-Reviewer: Analyse wissenschaftlicher Texte auf Struktur und Argumentation
-Grant-Writing-Helper: Unterstützung bei der Erstellung von Forschungsanträgen
-Methodologie-Berater: Hilfe bei der Auswahl geeigneter Forschungsmethoden
+### "Failed to fetch" Fehler
 
-**Für Verwaltung**
+- ✅ Internetverbindung aktiv?
+- ✅ API-Key korrekt eingegeben?
+- ✅ Beide Server laufen (Proxy + Webserver)?
 
-Meeting-Protokoll-Generator: Automatische Erstellung strukturierter Protokolle aus Audio-Aufzeichnungen
-E-Mail-Template-Bibliothek: Vorgefertigte Vorlagen für häufige Verwaltungsaufgaben
-Batch-Verarbeitung: Simultane Bearbeitung mehrerer Dokumente
-Compliance-Checker: Überprüfung von Dokumenten auf Richtlinienkonformität
+### API-Key-Fehler (401 Unauthorized)
 
-**Zukunftsvision**
+- ✅ API-Key von [ki-chat.uni-mainz.de](https://ki-chat.uni-mainz.de) holen
+- ✅ Key vollständig kopiert? (keine Leerzeichen)
+- ✅ Key noch gültig? (nicht abgelaufen)
 
-Campus-System-Integration: Anbindung an bestehende Universitätssoftware
-Multi-User-Funktionalität: Kollaborative Dokumentenbearbeitung
-API-Schnittstellen: Integration in andere Anwendungen
-Mobile Companion-App: Ergänzende Smartphone-Anwendung
+### Modelle werden nicht geladen
 
-**Entwicklungsstrategie**
+- ✅ Proxy-Server läuft?
+- ✅ Debug-Konsole (🐛) prüfen für Fehlermeldungen
+- ✅ Fallback-Modelle werden automatisch verwendet
 
-Die Umsetzung erfolgt in priorisierten Stufen:
+➡️ Weitere Hilfe: [PROXY_ANLEITUNG.md](PROXY_ANLEITUNG.md)
 
-Export-Optionen und Modell-Auswahl für schnelle Nutzererfolge
-WhisperAI-Integration als Game-Changer für die Universitätsverwaltung
-Spezifische Uni-Features basierend auf Nutzerfeedback und konkreten Anforderungen
+## Offizielle Dokumentation
 
+- [ZDV KI-Chat](https://www.zdv.uni-mainz.de/ki-an-der-jgu/)
+- [KI-Chat API Nutzung](https://www.zdv.uni-mainz.de/ki-chat-api-nutzung/)
+- [KI-Chat Agentic Coding](https://www.zdv.uni-mainz.de/ki-chat-agentic-coding/)
+- [API-Endpunkt](https://ki-chat.uni-mainz.de/api)
 
-## Changelog
+## Lizenz
 
-### Version 0.1
-- Multi-Datei-Upload (bis zu 3 Dateien)
-- Verbesserte Fehlerbehandlung
-- Erweiterte Dateiformat-Unterstützung
-- UI-Verbesserungen
+Dieses Projekt ist für den internen Gebrauch an der Johannes Gutenberg-Universität Mainz bestimmt.
 
-### Version 0.01
-- Erste Veröffentlichung
-- 6 vorgefertigte KI-Agenten
-- PDF/Word/Text-Unterstützung
-- API-Key-Verwaltung
+## Kontakt
 
----
-
-**Entwickelt für die Johannes Gutenberg-Universität Mainz**
+Bei Fragen oder Anregungen wenden Sie sich bitte an baselt@uni-mainz.de.
