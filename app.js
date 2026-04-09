@@ -1,3 +1,7 @@
+// App-Version (zur Cache-Verifikation)
+const APP_VERSION = '4';
+console.log('[JGU-Agent] app.js Version', APP_VERSION, 'geladen');
+
 // Global State
 const APP_STATE = {
     apiKey: null,
@@ -530,6 +534,30 @@ function showExample() {
     Logger.debug('Beispiel angezeigt');
 }
 
+/**
+ * Extrahiert Text aus einer PDF-Datei mit PDF.js
+ */
+async function extractPdfText(file) {
+    if (typeof pdfjsLib === 'undefined') {
+        throw new Error('PDF.js nicht geladen. Bitte prüfen Sie die Internetverbindung.');
+    }
+
+    const arrayBuffer = await file.arrayBuffer();
+    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+
+    Logger.debug('PDF geladen', { pages: pdf.numPages, fileName: file.name });
+
+    const pageTexts = [];
+    for (let i = 1; i <= pdf.numPages; i++) {
+        const page = await pdf.getPage(i);
+        const textContent = await page.getTextContent();
+        const pageText = textContent.items.map(item => item.str).join(' ');
+        pageTexts.push(`[Seite ${i}]\n${pageText}`);
+    }
+
+    return pageTexts.join('\n\n');
+}
+
 function uploadFile() {
     Logger.info('Datei-Upload gestartet', {
         currentFiles: APP_STATE.uploadedFiles.length
@@ -600,12 +628,28 @@ function handleFileUpload(event) {
         if (file.name.endsWith('.txt') || file.type === 'text/plain') {
             Logger.debug('Lese als Textdatei', { fileName: file.name });
             reader.readAsText(file);
+        } else if (file.name.endsWith('.pdf') || file.type === 'application/pdf') {
+            Logger.debug('Lese PDF mit PDF.js', { fileName: file.name });
+            extractPdfText(file).then(content => {
+                Logger.debug('PDF erfolgreich extrahiert', {
+                    fileName: file.name,
+                    contentLength: content.length
+                });
+                APP_STATE.uploadedFiles.push({ name: file.name, content: content, type: file.type });
+                updateFileDisplay();
+                showAlert(`Datei '${file.name}' wurde erfolgreich geladen! (${APP_STATE.uploadedFiles.length}/3)`, 'success');
+                Logger.success('PDF hinzugefügt', { fileName: file.name, totalFiles: APP_STATE.uploadedFiles.length });
+            }).catch(error => {
+                Logger.error('PDF-Extraktion fehlgeschlagen', error, { fileName: file.name });
+                showAlert(`❌ Fehler beim Lesen von '${file.name}'. Bitte als .txt-Datei exportieren.`, 'error');
+            });
+            return; // reader.readAsText nicht aufrufen für PDFs
         } else {
             Logger.warning('Nicht-Text-Datei erkannt', {
                 fileName: file.name,
                 type: file.type
             });
-            showAlert(`Hinweis: ${file.name} - Nur .txt Dateien werden vollständig unterstützt. PDF und DOCX benötigen zusätzliche Bibliotheken.`, 'warning');
+            showAlert(`Hinweis: ${file.name} - Nur .txt und .pdf Dateien werden unterstützt.`, 'warning');
             reader.readAsText(file);
         }
     });
@@ -710,7 +754,10 @@ async function processText() {
         Logger.debug('Standard-Anweisung für Datei-Only verwendet', { instruction: userInput });
     }
 
-    // Add file contents
+    // Add file contents (mit Größenbegrenzung wegen Kontext-Limit des Modells)
+    // ~8.000 Zeichen ≈ 2.000 Tokens – konservativ, lässt Raum für System-Prompt und Antwort
+    const MAX_FILE_CHARS = 8000;
+
     if (APP_STATE.uploadedFiles.length > 0) {
         Logger.debug('Füge Datei-Inhalte hinzu', {
             fileCount: APP_STATE.uploadedFiles.length
@@ -718,13 +765,40 @@ async function processText() {
 
         userInput += "\n\n--- Inhalte der hochgeladenen Dateien ---\n";
         APP_STATE.uploadedFiles.forEach((file, index) => {
+            let content = file.content;
+            let truncated = false;
+
+            if (content.length > MAX_FILE_CHARS) {
+                content = content.slice(0, MAX_FILE_CHARS);
+                // Am letzten Satzende abschneiden, damit kein halber Satz bleibt
+                const lastPeriod = Math.max(
+                    content.lastIndexOf('. '),
+                    content.lastIndexOf('.\n')
+                );
+                if (lastPeriod > MAX_FILE_CHARS * 0.8) {
+                    content = content.slice(0, lastPeriod + 1);
+                }
+                truncated = true;
+            }
+
             userInput += `\n=== Datei ${index + 1}: ${file.name} ===\n`;
-            userInput += file.content;
+            userInput += content;
+            if (truncated) {
+                userInput += `\n\n[⚠️ Dokument wurde auf ${MAX_FILE_CHARS} Zeichen gekürzt – ` +
+                    `nur der erste Teil wurde verarbeitet. Für vollständige Analyse das Dokument aufteilen.]`;
+                Logger.warning('Datei-Inhalt gekürzt', {
+                    fileName: file.name,
+                    originalLength: file.content.length,
+                    truncatedLength: content.length
+                });
+                showAlert(`⚠️ '${file.name}' ist zu groß und wurde auf die ersten ${MAX_FILE_CHARS} Zeichen gekürzt.`, 'warning');
+            }
             userInput += "\n" + "=".repeat(50) + "\n";
 
             Logger.debug(`Datei ${index + 1} hinzugefügt`, {
                 fileName: file.name,
-                contentLength: file.content.length
+                contentLength: content.length,
+                truncated: truncated
             });
         });
     }
@@ -743,6 +817,20 @@ async function processText() {
         const language = select ? select.value : 'Python';
         systemPrompt = systemPrompt.replace('{language}', language);
         Logger.debug('Code-Sprache', { language: language });
+    }
+
+    // Harte Gesamtbegrenzung: ~3.000 Tokens ≈ 12.000 Zeichen
+    // Schützt vor Kontext-Überschreitung unabhängig von der Eingabequelle
+    const MAX_TOTAL_CHARS = 12000;
+    if (userInput.length > MAX_TOTAL_CHARS) {
+        const truncAt = userInput.lastIndexOf('\n', MAX_TOTAL_CHARS) || MAX_TOTAL_CHARS;
+        userInput = userInput.slice(0, truncAt) +
+            '\n\n[⚠️ Eingabe auf 12.000 Zeichen begrenzt – nur erster Teil wird verarbeitet]';
+        Logger.warning('Gesamteingabe gekürzt', {
+            originalLength: userInput.length,
+            truncatedTo: truncAt
+        });
+        showAlert('⚠️ Text zu lang – auf 12.000 Zeichen gekürzt. Nur der erste Teil wird verarbeitet.', 'warning');
     }
 
     // Update UI
@@ -797,14 +885,26 @@ async function processText() {
                 responseBody: errorText
             });
 
+            // Zeige API-Fehlerdetails direkt im Ergebnisfeld
+            let apiErrorDetail = errorText;
+            try {
+                const parsed = JSON.parse(errorText);
+                apiErrorDetail = parsed?.error?.message || parsed?.message || errorText;
+            } catch (_) {}
+            document.getElementById('resultArea').value =
+                `❌ API-Fehler ${response.status}\n\n${apiErrorDetail}\n\n` +
+                `(Weitere Details in der 🐛 Debug-Konsole)`;
+
             // Spezifische Fehlermeldungen
             if (response.status === 401) {
                 showAlert('❌ API-Key ungültig oder abgelaufen. Bitte prüfen Sie Ihren API-Key.', 'error');
             } else if (response.status === 429) {
                 showAlert('⚠️ Rate-Limit erreicht. Bitte warten Sie kurz und versuchen Sie es erneut.', 'warning');
+            } else if (response.status === 400) {
+                showAlert('❌ Ungültige Anfrage (400). Fehlermeldung im Ergebnisfeld sichtbar.', 'error');
             }
 
-            throw new Error(`API-Fehler: ${response.status} - ${response.statusText}`);
+            throw new Error(`API-Fehler: ${response.status} - ${apiErrorDetail}`);
         }
 
         const data = await response.json();

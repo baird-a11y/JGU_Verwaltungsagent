@@ -121,8 +121,17 @@
     <!-- File Input (Hidden) -->
     <input type="file" id="fileInput" accept=".txt,.pdf,.docx" style="display: none;" onchange="handleFileUpload(event)" multiple>
 
-    <!-- Load JavaScript -->
-    <script src="logger.js"></script>
-    <script src="app.js"></script>
+    <!-- PDF.js für Text-Extraktion aus PDF-Dateien -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script>
+        if (typeof pdfjsLib !== 'undefined') {
+            pdfjsLib.GlobalWorkerOptions.workerSrc =
+                'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        }
+    </script>
+
+    <!-- Load JavaScript (v=4 erzwingt Neu-Laden aus dem Browser-Cache) -->
+    <script src="logger.js?v=4"></script>
+    <script src="app.js?v=4"></script>
 </body>
 </html>
