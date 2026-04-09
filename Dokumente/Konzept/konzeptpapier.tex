@@ -1,0 +1,370 @@
+\documentclass[12pt, a4paper]{article}
+
+% ============================================================
+% Pakete
+% ============================================================
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[ngerman]{babel}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage{microtype}
+\usepackage{parskip}
+\usepackage{csquotes}
+\usepackage{amssymb}
+\emergencystretch=1.5em
+\usepackage[backend=biber, style=authoryear, maxcitenames=2, doi=false, isbn=false, url=false]{biblatex}
+\addbibresource{literatur.bib}
+
+% ============================================================
+% Seitenränder
+% ============================================================
+\geometry{
+  top=2.5cm,
+  bottom=2.5cm,
+  left=3cm,
+  right=2.5cm,
+  headheight=14pt
+}
+
+% ============================================================
+% Farben (JGU-orientiert)
+% ============================================================
+\definecolor{jgublue}{RGB}{0, 60, 118}
+\definecolor{jgugray}{RGB}{100, 100, 100}
+
+% ============================================================
+% Hyperlinks
+% ============================================================
+\hypersetup{
+  colorlinks=true,
+  linkcolor=jgublue,
+  urlcolor=jgublue,
+  citecolor=jgublue,
+  pdftitle={Konzeptpapier: KI-Assistent Web-Anwendung JGU},
+  pdfauthor={baselt@uni-mainz.de}
+}
+
+% ============================================================
+% Kopf- und Fußzeile
+% ============================================================
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textcolor{jgugray}{JGU Mainz -- Verwaltungsagent}}
+\fancyhead[R]{\small\textcolor{jgugray}{\today}}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% ============================================================
+% Abschnittsformatierung
+% ============================================================
+\titleformat{\section}{\large\bfseries\color{jgublue}}{}{0em}{}[\titlerule]
+\titleformat{\subsection}{\normalsize\bfseries\color{jgublue}}{}{0em}{}
+
+% ============================================================
+% Dokument
+% ============================================================
+\begin{document}
+
+% -----------------------------------------------------------
+% Titelseite
+% -----------------------------------------------------------
+\begin{titlepage}
+  \centering
+  \vspace*{1.5cm}
+
+  {\Large\bfseries Johannes Gutenberg-Universität Mainz}\\[0.4cm]
+  {\normalsize Dezernat Hochschulentwicklung (HE)}\\[2cm]
+
+  \rule{\linewidth}{1.5pt}\\[0.4cm]
+  {\LARGE\bfseries\color{jgublue} KI-Assistent Web-Anwendung\\[0.3cm] für die Hochschulverwaltung}\\[0.3cm]
+  \rule{\linewidth}{1.5pt}\\[1.5cm]
+
+  {\large\textbf{Konzeptpapier}}\\[0.5cm]
+  {\normalsize Machbarkeitsstudie und Funktionsbeschreibung}\\[2.5cm]
+
+  \begin{tabular}{rl}
+    \textbf{Autor:}        & Paul Baselt \\
+    \textbf{Kontakt:}      & \href{mailto:baselt@uni-mainz.de}{baselt@uni-mainz.de} \\
+    \textbf{Institution:}  & Johannes Gutenberg-Universität Mainz \\
+    \textbf{Status:}       & Entwurf / Machbarkeitsnachweis \\
+    \textbf{Version:}      & 1.0 \\
+    \textbf{Datum:}        & \today \\
+  \end{tabular}
+
+  \vfill
+  {\small\textcolor{jgugray}{Dieses Dokument ist für den internen Gebrauch an der JGU Mainz bestimmt.}}
+\end{titlepage}
+
+% -----------------------------------------------------------
+% Inhaltsverzeichnis
+% -----------------------------------------------------------
+\tableofcontents
+\newpage
+
+% -----------------------------------------------------------
+% 1. Zusammenfassung
+% -----------------------------------------------------------
+\section{Zusammenfassung}
+
+Dieses Konzeptpapier beschreibt die Entwicklung und den Einsatz einer KI-basierten Web-Anwendung (»Verwaltungsagent«) für die Johannes Gutenberg-Universität Mainz. Die Anwendung ermöglicht Mitarbeiterinnen und Mitarbeitern einen niedrigschwelligen Zugang zu den KI-Services der Universität über eine benutzerfreundliche Oberfläche. Vorgefertigte Aufgabenvorlagen (Agenten) reduzieren den Aufwand für die Formulierung von Prompts und erhöhen die Qualität der KI-Antworten für typische Verwaltungsaufgaben. Die vorliegende Version ist als Machbarkeitsnachweis konzipiert und bildet die Grundlage für eine mögliche institutionelle Weiterentwicklung.
+
+% -----------------------------------------------------------
+% 2. Motivation und Problemstellung
+% -----------------------------------------------------------
+\section{Motivation und Problemstellung}
+
+Hochschulen stehen zunehmend vor der Herausforderung, KI-Werkzeuge sinnvoll und sicher in bestehende Arbeitsabläufe zu integrieren. Obwohl die JGU Mainz über eine eigene KI-Infrastruktur verfügt (\href{https://ki-chat.uni-mainz.de}{ki-chat.uni-mainz.de}), erfordert deren direkte API-Nutzung technische Kenntnisse, die im Verwaltungsbereich häufig nicht vorhanden sind.
+
+Konkrete Problemfelder:
+\begin{itemize}[leftmargin=1.5cm]
+  \item Fehlende Benutzeroberfläche für die direkte API-Nutzung ohne technisches Vorwissen
+  \item Inkonsistente Prompt-Qualität führt zu variablen Ergebnissen
+  \item Kein institutioneller Standard für typische Verwaltungsaufgaben (Zusammenfassung, Übersetzung, E-Mail-Erstellung)
+  \item Datenschutzbedenken bei der Nutzung externer KI-Dienste (z.\,B.\ ChatGPT)
+\end{itemize}
+
+% -----------------------------------------------------------
+% 3. Wissenschaftlicher Hintergrund
+% -----------------------------------------------------------
+\section{Wissenschaftlicher Hintergrund}
+
+Die Gestaltung des Verwaltungsagenten basiert auf aktuellen Erkenntnissen der Forschung zu Prompt Engineering, In-Context Learning und Mensch-KI-Zusammenarbeit. Im Folgenden werden die zentralen Referenzarbeiten kurz vorgestellt.
+
+\subsection{Prompt Engineering: Überblick und Taxonomien}
+
+\textcite{sahoo2024survey} liefern einen systematischen Überblick über mehr als 41 Prompt-Engineering-Techniken, kategorisiert nach Anwendungsbereichen. Neben grundlegenden Ansätzen wie Zero-Shot- und Few-Shot-Prompting werden fortgeschrittene Methoden wie Chain-of-Thought (CoT), Tree-of-Thoughts und Retrieval-Augmented Generation (RAG) behandelt. Für jede Technik werden Stärken, Schwächen sowie eingesetzte Modelle und Datensätze dokumentiert. Die Arbeit verdeutlicht, dass die Qualität von Prompts maßgeblich die Ausgabequalität von LLMs bestimmt -- ein zentrales Argument für den Einsatz vorgefertigter, erprobter Prompt-Vorlagen im Verwaltungsagenten.
+
+Das bisher umfangreichste Survey zu diesem Thema stammt von \textcite{schulhoff2025promptreport}: Der \textit{Prompt Report} definiert eine einheitliche Terminologie mit 33 Fachbegriffen, identifiziert 58 textbasierte LLM-Techniken sowie 40 weitere für andere Modalitäten und diskutiert Sicherheitsrisiken (Prompt Hacking) und Alignment-Probleme. Die Arbeit zeigt, dass eine strukturierte Herangehensweise an Prompts -- wie sie der Verwaltungsagent durch vordefinierte Agenten umsetzt -- die Nutzbarkeit und Zuverlässigkeit von KI-Systemen erheblich verbessert.
+
+\textcite{hooper2025incontext} ergänzen diesen Überblick mit einem Fokus auf In-Context Learning (ICL): Modelle können neue Aufgaben allein durch Beispiele im Prompt erlernen, ohne Modellparameter anzupassen. Effektives Prompt Engineering kann die Modellleistung auf Benchmarks um 20--40\,\% steigern. Die Arbeit kategorisiert Techniken in manuelle (Templates, Instruktionen), automatisierte (Soft Prompts, RL-basierte Optimierung) und hybride Ansätze und identifiziert Prompt-Sensitivität als zentrale Herausforderung für den Praxiseinsatz.
+
+\subsection{Diversität und Qualität von LLM-Ausgaben}
+
+\textcite{zhang2025verbalized} zeigen, dass Post-Training-Alignment-Verfahren (RLHF) die Ausgabenvielfalt von LLMs durch \textit{Mode Collapse} reduzieren. Als Ursache identifizieren sie einen \textit{Typizitätsbias} in Präferenzdaten: Annotatorinnen und Annotatoren bevorzugen systematisch vertraute, typische Antworten, was das Modell auf wenige häufige Ausgaben einengt. Als trainingsfreie Lösung schlagen die Autoren \textit{Verbalized Sampling} (VS) vor: Das Modell wird aufgefordert, explizit eine Verteilung von Antworten mit Wahrscheinlichkeiten zu generieren statt einer einzelnen Antwort. VS steigert die Ausgabenvielfalt in kreativen Aufgaben um den Faktor 1{,}6--2{,}1, ohne Faktentreue oder Sicherheit zu beeinträchtigen. Diese Erkenntnis ist für den Verwaltungsagenten relevant, wenn es darum geht, unterschiedliche Formulierungsvarianten (z.\,B.\ für E-Mails) bereitzustellen.
+
+\subsection{Mensch-KI-Kollaboration und Synergieeffekte}
+
+\textcite{anonymous2025synergy} untersuchen mittels eines Bayesianischen Item-Response-Theory-Frameworks, wie stark verschiedene KI-Modelle die menschliche Problemlöseleistung verbessern. Die Studie zeigt: GPT-4o steigert die Leistung von Nutzenden um durchschnittlich 29 Prozentpunkte, Llama-3.1-8B um 23 Prozentpunkte -- gemessen an einem Datensatz mit 667 Teilnehmenden. Entscheidend ist dabei die individuelle \textit{Theory of Mind}: Nutzende, die besser in der Lage sind, die Perspektive anderer einzunehmen und zu antizipieren, erzielen eine überlegene kollaborative Leistung mit KI. Für schwächere Nutzende wirkt KI als Leistungsausgleich (»Leveling the Playing Field«). Diese Befunde unterstreichen den Mehrwert eines niedrigschwelligen KI-Zugangs, wie ihn der Verwaltungsagent bietet.
+
+% -----------------------------------------------------------
+% 3. Zielsetzung
+% -----------------------------------------------------------
+\section{Zielsetzung}
+
+Die Anwendung verfolgt folgende Ziele:
+
+\begin{enumerate}[leftmargin=1.5cm]
+  \item \textbf{Zugänglichkeit:} Bereitstellung einer intuitiven Web-Oberfläche für die KI-API der JGU, ohne Programmierkenntnisse vorauszusetzen.
+  \item \textbf{Standardisierung:} Vorgefertigte, erprobte Prompts für häufige Aufgaben sichern eine konsistente Ausgabequalität.
+  \item \textbf{Datenschutz:} Ausschließliche Nutzung der universitätseigenen KI-Infrastruktur; keine Übertragung von Daten an externe Dienste.
+  \item \textbf{Erweiterbarkeit:} Modularer Aufbau ermöglicht die spätere Integration weiterer Agenten und Funktionen.
+\end{enumerate}
+
+% -----------------------------------------------------------
+% 4. Funktionsumfang
+% -----------------------------------------------------------
+\section{Funktionsumfang}
+
+\subsection{Vorgefertigte KI-Agenten}
+
+Die Anwendung stellt sechs spezialisierte Agenten bereit, die für häufige Verwaltungsaufgaben optimiert sind:
+
+\begin{table}[h]
+  \centering
+  \begin{tabular}{lp{9cm}}
+    \toprule
+    \textbf{Agent} & \textbf{Beschreibung} \\
+    \midrule
+    Text zusammenfassen  & Erstellt strukturierte Zusammenfassungen aus langen Dokumenten \\
+    Text übersetzen      & Professionelle Übersetzungen in 6 Sprachen (DE, EN, FR, ES, IT, NL) \\
+    E-Mail schreiben     & Generiert formelle E-Mails aus Stichpunkten \\
+    Daten analysieren    & Strukturierte Analyse mit Handlungsempfehlungen \\
+    Thema erforschen     & Umfassende Recherche zu beliebigen Themen \\
+    Code erstellen       & Sauberer, kommentierter Code in 7 Programmiersprachen \\
+    \bottomrule
+  \end{tabular}
+  \caption{Übersicht der implementierten KI-Agenten}
+\end{table}
+
+\subsection{Datei-Support}
+
+\begin{itemize}[leftmargin=1.5cm]
+  \item \textbf{PDF-Dateien} (.pdf): Automatische Textextraktion via PDF.js
+  \item \textbf{Textdateien} (.txt): Direkter Import
+  \item \textbf{Multi-Upload}: Bis zu 3 Dateien gleichzeitig
+\end{itemize}
+
+\noindent\textit{Hinweis:} Große Dokumente werden derzeit auf 12.000 Zeichen (ca.\ 3.000 Tokens) begrenzt. DOCX-Dateien werden noch nicht unterstützt.
+
+\subsection{Weitere Funktionen}
+
+\begin{itemize}[leftmargin=1.5cm]
+  \item Dynamische Modell-Auswahl direkt von der API
+  \item Sichere API-Key-Verwaltung (lokaler Browser-Speicher)
+  \item Verlaufshistorie der letzten 50 Ergebnisse
+  \item Export-Funktionen (Kopieren, Speichern)
+  \item Debug-Konsole für technische Diagnose
+  \item Responsives Design (Desktop und Mobilgeräte)
+\end{itemize}
+
+% -----------------------------------------------------------
+% 5. Konzept: Prompt-Bibliothek
+% -----------------------------------------------------------
+\section{Konzept: Prompt-Bibliothek}
+
+\subsection{Motivation}
+
+Die aktuelle Implementierung bietet sechs fest kodierte Agenten mit unveränderlichen Prompts. Für den Praxiseinsatz in der Hochschulverwaltung ist jedoch eine größere Flexibilität notwendig: Mitarbeitende in verschiedenen Dezernaten haben unterschiedliche Anforderungen, bevorzugte Formulierungen und wiederkehrende Aufgaben, die sich nicht durch ein einheitliches Prompt-Set abdecken lassen. Gleichzeitig belegen \textcite{sahoo2024survey} und \textcite{schulhoff2025promptreport}, dass gut strukturierte, aufgabenspezifische Prompts die Qualität von KI-Ausgaben erheblich verbessern. Die Erweiterung um eine persönliche und institutionelle Prompt-Bibliothek ist daher ein zentraler nächster Entwicklungsschritt.
+
+\subsection{Zweistufiges Bibliotheksmodell}
+
+Das Konzept sieht zwei Ebenen von Prompt-Sammlungen vor, die sich ergänzen:
+
+\begin{description}[leftmargin=1.5cm, style=nextline]
+  \item[Institutionelle Bibliothek (schreibgeschützt)]
+    Zentral verwaltete, erprobte Prompts für hochschulweite Standardaufgaben. Diese werden durch Administratoren gepflegt und stehen allen Nutzenden zur Verfügung. Nutzende können diese Prompts als Vorlage in ihre persönliche Bibliothek übernehmen und dort anpassen.
+  \item[Persönliche Bibliothek (vollständig bearbeitbar)]
+    Individuelle Prompt-Sammlung je Nutzerin bzw. Nutzer. Eigene Prompts können neu erstellt, aus der institutionellen Bibliothek kopiert, bearbeitet, kategorisiert, exportiert und gelöscht werden.
+\end{description}
+
+\subsection{Prompt-Template-Struktur}
+
+Prompts werden als Templates mit variablen Platzhaltern gespeichert. Vor dem Absenden werden die Platzhalter durch ein dynamisches Formular befüllt. Ein Prompt-Datensatz enthält folgende Felder:
+
+\begin{table}[h]
+  \centering
+  \begin{tabular}{llp{7.5cm}}
+    \toprule
+    \textbf{Feld} & \textbf{Typ} & \textbf{Beschreibung} \\
+    \midrule
+    \texttt{id}          & String (UUID) & Eindeutige Kennung \\
+    \texttt{name}        & String        & Anzeigename des Prompts \\
+    \texttt{kategorie}   & String        & Thematische Gruppe (z.\,B.\ Kommunikation, Analyse) \\
+    \texttt{template}    & String        & Prompt-Text mit Platzhaltern (\texttt{\{\{Variable\}\}}) \\
+    \texttt{variablen}   & Array         & Liste der enthaltenen Platzhalter-Namen \\
+    \texttt{quelle}      & Enum          & \texttt{institutionell} oder \texttt{persönlich} \\
+    \texttt{erstellt\_am} & Datum        & Erstellungsdatum \\
+    \bottomrule
+  \end{tabular}
+  \caption{Datenstruktur eines Prompt-Templates}
+\end{table}
+
+\noindent\textbf{Beispiel:} Ein Template für mehrsprachige E-Mails könnte lauten:
+\begin{quote}
+  \textit{»Schreibe eine \texttt{\{\{Tonalität\}\}} E-Mail auf \texttt{\{\{Sprache\}\}} über folgenden Sachverhalt: \texttt{\{\{Inhalt\}\}}«}
+\end{quote}
+Beim Aufruf dieses Prompts erscheint ein Formular mit drei Feldern (\textit{Tonalität}, \textit{Sprache}, \textit{Inhalt}), das der Nutzer ausfüllt, bevor der fertige Prompt an das Modell gesendet wird.
+
+\subsection{Nutzer-Workflow}
+
+Der Ablauf aus Nutzerperspektive gliedert sich in vier Schritte:
+
+\begin{enumerate}[leftmargin=1.5cm]
+  \item \textbf{Auswählen:} Nutzende wählen einen Prompt aus der institutionellen oder persönlichen Bibliothek -- gefiltert nach Kategorie oder per Freitextsuche.
+  \item \textbf{Anpassen (optional):} Platzhalter werden in einem dynamisch generierten Formular befüllt. Der resultierende Prompt ist vor dem Absenden noch manuell editierbar.
+  \item \textbf{Absenden:} Der fertige Prompt wird wie bisher an das gewählte Modell über die JGU-API gesendet.
+  \item \textbf{Speichern (optional):} Nutzende können den angepassten Prompt unter einem eigenen Namen in ihrer persönlichen Bibliothek speichern.
+\end{enumerate}
+
+\subsection{Technische Umsetzungsoptionen}
+
+Die Speicherung der persönlichen Bibliothek kann in drei Ausbaustufen erfolgen:
+
+\begin{table}[h]
+  \centering
+  \begin{tabular}{lp{3.5cm}p{6cm}}
+    \toprule
+    \textbf{Stufe} & \textbf{Technologie} & \textbf{Eigenschaften} \\
+    \midrule
+    1 & \texttt{localStorage} / \texttt{IndexedDB} & Kein Server erforderlich; Daten nur im Browser; geeignet als erster Prototyp \\
+    2 & Lokale JSON-Datei (Export/Import) & Portabilität zwischen Geräten; manueller Austausch möglich \\
+    3 & Server-seitige Datenbank (z.\,B.\ SQLite, PostgreSQL) & Geräteübergreifend; Teilen von Prompts; Rechteverwaltung; Integration in JGU-Infrastruktur \\
+    \bottomrule
+  \end{tabular}
+  \caption{Speicheroptionen für die persönliche Prompt-Bibliothek}
+\end{table}
+
+\noindent Für den Machbarkeitsnachweis wird \textbf{Stufe 1} (IndexedDB im Browser) empfohlen, da sie ohne Serverinfrastruktur auskommt und dennoch größere Datenmengen als \texttt{localStorage} verwalten kann. Eine Migration zu Stufe 3 ist zu einem späteren Zeitpunkt möglich, ohne die Kernlogik zu verändern.
+
+% -----------------------------------------------------------
+% 6. Technische Architektur
+% -----------------------------------------------------------
+\section{Technische Architektur}
+
+\subsection{Systemkomponenten}
+
+Die Anwendung besteht aus drei Hauptkomponenten:
+
+\begin{enumerate}[leftmargin=1.5cm]
+  \item \textbf{Frontend} (\texttt{JGU\_Agenten.html}, \texttt{app.js}, \texttt{styles.css}): Browserbasierte Benutzeroberfläche ohne externe Framework-Abhängigkeiten.
+  \item \textbf{CORS-Proxy} (\texttt{proxy-server.js}): Lokaler Node.js-Server, der Browser-Sicherheitsrestriktionen (CORS) umgeht und API-Anfragen weiterleitet.
+  \item \textbf{KI-API der JGU}: \href{https://ki-chat.uni-mainz.de/api}{ki-chat.uni-mainz.de/api} -- die universitätseigene KI-Infrastruktur (OpenAI-kompatibel).
+\end{enumerate}
+
+\subsection{Voraussetzungen}
+
+\begin{itemize}[leftmargin=1.5cm]
+  \item Node.js (v14 oder höher) für den Proxy-Server
+  \item Moderner Webbrowser (Chrome, Firefox, Edge)
+  \item API-Key von \href{https://ki-chat.uni-mainz.de}{ki-chat.uni-mainz.de}
+\end{itemize}
+
+% -----------------------------------------------------------
+% 6. Datenschutz und Sicherheit
+% -----------------------------------------------------------
+\section{Datenschutz und Sicherheit}
+
+\begin{itemize}[leftmargin=1.5cm]
+  \item Alle API-Anfragen werden ausschließlich an die universitätseigene Infrastruktur gesendet.
+  \item Der API-Key wird ausschließlich im lokalen Browser-Speicher (LocalStorage) gespeichert und nicht an Dritte übertragen.
+  \item Die Anwendung nutzt keinen externen CDN und lädt keine Ressourcen von Drittanbietern nach (außer PDF.js).
+  \item Die Einhaltung der JGU-Datenschutzrichtlinien ist bei einem möglichen Produktiveinsatz zu prüfen.
+\end{itemize}
+
+% -----------------------------------------------------------
+% 7. Roadmap
+% -----------------------------------------------------------
+\section{Roadmap und offene Punkte}
+
+\subsection{Abgeschlossen}
+
+\begin{itemize}[leftmargin=1.5cm]
+  \item[$\checkmark$] Dynamische Modell-Auswahl
+  \item[$\checkmark$] Debug-Logging-System
+  \item[$\checkmark$] CORS-Proxy-Lösung
+  \item[$\checkmark$] Start-Skripte für Windows und Linux/macOS
+  \item[$\checkmark$] PDF-Textextraktion via PDF.js
+\end{itemize}
+
+\subsection{Geplante Erweiterungen}
+
+\begin{itemize}[leftmargin=1.5cm]
+  \item \textbf{Prompt-Bibliothek} (persönlich + institutionell) mit Template-System und Platzhaltern (siehe Abschnitt~5)
+  \item Download der Antworten als Word- oder PDF-Dokument
+  \item DOCX-Dateiverarbeitung
+  \item Chunking für große Dokumente (statt Kürzung)
+  \item Streaming-Support für schnellere Antwortanzeige
+  \item Dark Mode
+\end{itemize}
+
+% -----------------------------------------------------------
+% 8. Fazit
+% -----------------------------------------------------------
+\section{Fazit}
+
+Die entwickelte Web-Anwendung demonstriert, dass eine benutzerfreundliche Oberfläche für die KI-Services der JGU mit geringem technischem Aufwand realisierbar ist. Der Machbarkeitsnachweis zeigt das Potenzial für eine breitere institutionelle Nutzung. Eine Weiterentwicklung in Richtung produktiver Einsatz erfordert die Einbindung der zuständigen Stellen (ZDV, Datenschutzbeauftragter) sowie eine systematische Bedarfserhebung bei den Zielgruppen in der Verwaltung.
+
+% -----------------------------------------------------------
+% Literatur
+% -----------------------------------------------------------
+\newpage
+\printbibliography[title={Literatur}]
+
+\end{document}

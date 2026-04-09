@@ -1,0 +1,429 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nyt/global//global/global/global}
+    \entry{anonymous2025synergy}{article}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=7079c72c21415131774625ba1d64f4b0}{%
+           family={Anonymous},
+           familyi={A\bibinitperiod}}}%
+      }
+      \strng{namehash}{7079c72c21415131774625ba1d64f4b0}
+      \strng{fullhash}{7079c72c21415131774625ba1d64f4b0}
+      \strng{fullhashraw}{7079c72c21415131774625ba1d64f4b0}
+      \strng{bibnamehash}{7079c72c21415131774625ba1d64f4b0}
+      \strng{authorbibnamehash}{7079c72c21415131774625ba1d64f4b0}
+      \strng{authornamehash}{7079c72c21415131774625ba1d64f4b0}
+      \strng{authorfullhash}{7079c72c21415131774625ba1d64f4b0}
+      \strng{authorfullhashraw}{7079c72c21415131774625ba1d64f4b0}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Under double-blind review}
+      \field{note}{Preprint, eingereicht zur Begutachtung}
+      \field{title}{Quantifying Human-{AI} Synergy}
+      \field{year}{2025}
+    \endentry
+    \entry{hooper2025incontext}{article}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=77e6ba61b7e07c562d75c9f5f083d69c}{%
+           family={Hooper},
+           familyi={H\bibinitperiod},
+           given={Aaron},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{institution}{1}{%
+        {University of Wisconsin--Madison}%
+      }
+      \strng{namehash}{77e6ba61b7e07c562d75c9f5f083d69c}
+      \strng{fullhash}{77e6ba61b7e07c562d75c9f5f083d69c}
+      \strng{fullhashraw}{77e6ba61b7e07c562d75c9f5f083d69c}
+      \strng{bibnamehash}{77e6ba61b7e07c562d75c9f5f083d69c}
+      \strng{authorbibnamehash}{77e6ba61b7e07c562d75c9f5f083d69c}
+      \strng{authornamehash}{77e6ba61b7e07c562d75c9f5f083d69c}
+      \strng{authorfullhash}{77e6ba61b7e07c562d75c9f5f083d69c}
+      \strng{authorfullhashraw}{77e6ba61b7e07c562d75c9f5f083d69c}
+      \field{sortinit}{H}
+      \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Preprint}
+      \field{note}{Unveröffentlichtes Manuskript}
+      \field{title}{Prompt Engineering and In-Context Learning: A Comprehensive Survey of Techniques, Applications, and Future Directions}
+      \field{year}{2025}
+    \endentry
+    \entry{sahoo2024survey}{article}{}{}
+      \name{author}{6}{}{%
+        {{un=0,uniquepart=base,hash=0f3a926f8fcfd5e93c6689d9e5b0b1ff}{%
+           family={Sahoo},
+           familyi={S\bibinitperiod},
+           given={Pranab},
+           giveni={P\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=255ca6ce52ce8826a6c82d67a42308fd}{%
+           family={Singh},
+           familyi={S\bibinitperiod},
+           given={Ayush\bibnamedelima Kumar},
+           giveni={A\bibinitperiod\bibinitdelim K\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=9f4e9584bc598469e23ea48a96dd8ab2}{%
+           family={Saha},
+           familyi={S\bibinitperiod},
+           given={Sriparna},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=be2375649ea8e9bb3064535f21ecb075}{%
+           family={Jain},
+           familyi={J\bibinitperiod},
+           given={Vinija},
+           giveni={V\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=e12b2233375ccce29cae03664ac12570}{%
+           family={Mondal},
+           familyi={M\bibinitperiod},
+           given={Samrat},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=26716af83827b7179271ca9d66267af2}{%
+           family={Chadha},
+           familyi={C\bibinitperiod},
+           given={Aman},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{55738d1bbb0d615578df2b747cbd77be}
+      \strng{fullhash}{cd16799a50ae6260032b66aa433382ec}
+      \strng{fullhashraw}{cd16799a50ae6260032b66aa433382ec}
+      \strng{bibnamehash}{55738d1bbb0d615578df2b747cbd77be}
+      \strng{authorbibnamehash}{55738d1bbb0d615578df2b747cbd77be}
+      \strng{authornamehash}{55738d1bbb0d615578df2b747cbd77be}
+      \strng{authorfullhash}{cd16799a50ae6260032b66aa433382ec}
+      \strng{authorfullhashraw}{cd16799a50ae6260032b66aa433382ec}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{arXiv preprint arXiv:2402.07927}
+      \field{note}{Version 2, März 2025}
+      \field{title}{A Systematic Survey of Prompt Engineering in Large Language Models: Techniques and Applications}
+      \field{year}{2024}
+      \verb{urlraw}
+      \verb https://arxiv.org/abs/2402.07927
+      \endverb
+      \verb{url}
+      \verb https://arxiv.org/abs/2402.07927
+      \endverb
+    \endentry
+    \entry{schulhoff2025promptreport}{article}{}{}
+      \name{author}{31}{}{%
+        {{un=0,uniquepart=base,hash=572b48d10d1ca3e03df3bc08618dd048}{%
+           family={Schulhoff},
+           familyi={S\bibinitperiod},
+           given={Sander},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=f773aed534a538a4d3ae125e53c149ea}{%
+           family={Ilie},
+           familyi={I\bibinitperiod},
+           given={Michael},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=808d5cf88672b716f29359a1f06601a7}{%
+           family={Balepur},
+           familyi={B\bibinitperiod},
+           given={Nishant},
+           giveni={N\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=5656eef590db99fef15521bd8d6664a2}{%
+           family={Kahadze},
+           familyi={K\bibinitperiod},
+           given={Konstantine},
+           giveni={K\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=7db5a7d413ea00d686fedd2fca543e76}{%
+           family={Liu},
+           familyi={L\bibinitperiod},
+           given={Amanda},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=50e55ce524a6cabd5d5e862c580e6869}{%
+           family={Si},
+           familyi={S\bibinitperiod},
+           given={Chenglei},
+           giveni={C\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=f29f16103d47cb547a785ee081268c6c}{%
+           family={Li},
+           familyi={L\bibinitperiod},
+           given={Yinheng},
+           giveni={Y\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=9296da738820f1b8b76320d669ddf026}{%
+           family={Gupta},
+           familyi={G\bibinitperiod},
+           given={Aayush},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=8d84a2e19f8a55ae31fed72deaca052f}{%
+           family={Han},
+           familyi={H\bibinitperiod},
+           given={HyoJung},
+           giveni={H\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=585714f3d76ef67cccb61d198cf96414}{%
+           family={Schulhoff},
+           familyi={S\bibinitperiod},
+           given={Sevien},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=ecf854451ee44b99aed3d2a8f75f16f7}{%
+           family={Dulepet},
+           familyi={D\bibinitperiod},
+           given={Pranav\bibnamedelima Sandeep},
+           giveni={P\bibinitperiod\bibinitdelim S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=5273e3b95f1d5e352c8928ac085b77dd}{%
+           family={Vidyadhara},
+           familyi={V\bibinitperiod},
+           given={Saurav},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=4faf825befa660f75adda8a62fbfb09c}{%
+           family={Ki},
+           familyi={K\bibinitperiod},
+           given={Dayeon},
+           giveni={D\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=f4421642bbde13def706feefe9c39cd7}{%
+           family={Agrawal},
+           familyi={A\bibinitperiod},
+           given={Sweta},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=c29742d2f39170d7cf9a84130831a615}{%
+           family={Pham},
+           familyi={P\bibinitperiod},
+           given={Chau},
+           giveni={C\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=56c2ff6af16c277a949b37c15764cea3}{%
+           family={Kroiz},
+           familyi={K\bibinitperiod},
+           given={Gerson},
+           giveni={G\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=ab0ec45eff644771d4bff0e3c40ea5b4}{%
+           family={Li},
+           familyi={L\bibinitperiod},
+           given={Feileen},
+           giveni={F\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=fc4392d541b6736084a5924ff2835aee}{%
+           family={Tao},
+           familyi={T\bibinitperiod},
+           given={Hudson},
+           giveni={H\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=99ef240a2d6161f24bf8e184d702b858}{%
+           family={Srivastava},
+           familyi={S\bibinitperiod},
+           given={Ashay},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=ae126e9242dc99ba911a8fa573876fee}{%
+           family={Da\bibnamedelima Costa},
+           familyi={D\bibinitperiod\bibinitdelim C\bibinitperiod},
+           given={Hevander},
+           giveni={H\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=cabc6222f57be750e3994dd409393bcb}{%
+           family={Gupta},
+           familyi={G\bibinitperiod},
+           given={Saloni},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=dddf87565cbd257bcff294fa6895bb9b}{%
+           family={Rogers},
+           familyi={R\bibinitperiod},
+           given={Megan\bibnamedelima L.},
+           giveni={M\bibinitperiod\bibinitdelim L\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=ffeb4cadd4e7a686ad942605402b1421}{%
+           family={Goncearenco},
+           familyi={G\bibinitperiod},
+           given={Inna},
+           giveni={I\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=8e98891b7c731d9cde323ca7421d57c3}{%
+           family={Sarli},
+           familyi={S\bibinitperiod},
+           given={Giuseppe},
+           giveni={G\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=1ec2a89421c1103dd9b9d95f01373ea8}{%
+           family={Galynker},
+           familyi={G\bibinitperiod},
+           given={Igor},
+           giveni={I\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=881557f79cb190ba4cc79eb775dc3db7}{%
+           family={Peskoff},
+           familyi={P\bibinitperiod},
+           given={Denis},
+           giveni={D\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=9cf67a53d9ebd335c787b143ec098196}{%
+           family={Carpuat},
+           familyi={C\bibinitperiod},
+           given={Marine},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=d224ecfefc70293d1b9b28a1915cf6f2}{%
+           family={White},
+           familyi={W\bibinitperiod},
+           given={Jules},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=9a831d318c9a798d7b9d1aff1545943e}{%
+           family={Anadkat},
+           familyi={A\bibinitperiod},
+           given={Shyamal},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=44177551d66b6f0da271276a2b65f585}{%
+           family={Hoyle},
+           familyi={H\bibinitperiod},
+           given={Alexander},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=ba57143778a42bc76658900fe675e760}{%
+           family={Resnik},
+           familyi={R\bibinitperiod},
+           given={Philip},
+           giveni={P\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{ef0db98bd7be90261474bc3de8f33007}
+      \strng{fullhash}{fcc7f42fe53de5e6ad1b81c46503b40b}
+      \strng{fullhashraw}{fcc7f42fe53de5e6ad1b81c46503b40b}
+      \strng{bibnamehash}{ef0db98bd7be90261474bc3de8f33007}
+      \strng{authorbibnamehash}{ef0db98bd7be90261474bc3de8f33007}
+      \strng{authornamehash}{ef0db98bd7be90261474bc3de8f33007}
+      \strng{authorfullhash}{fcc7f42fe53de5e6ad1b81c46503b40b}
+      \strng{authorfullhashraw}{fcc7f42fe53de5e6ad1b81c46503b40b}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{arXiv preprint arXiv:2406.06608}
+      \field{note}{Version 6, Februar 2025}
+      \field{title}{The Prompt Report: A Systematic Survey of Prompt Engineering Techniques}
+      \field{year}{2025}
+      \verb{urlraw}
+      \verb https://arxiv.org/abs/2406.06608
+      \endverb
+      \verb{url}
+      \verb https://arxiv.org/abs/2406.06608
+      \endverb
+    \endentry
+    \entry{zhang2025verbalized}{article}{}{}
+      \name{author}{7}{}{%
+        {{un=0,uniquepart=base,hash=754769aea83eb44a600ee15c6f9419f6}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={Jiayi},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=c4d07fa8ed2f39e2e91b0db80db63f1b}{%
+           family={Yu},
+           familyi={Y\bibinitperiod},
+           given={Simon},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=cef6275774057a364f71741f5ad488be}{%
+           family={Chong},
+           familyi={C\bibinitperiod},
+           given={Derek},
+           giveni={D\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=1c1c29e55826adb188c5ee06891249dc}{%
+           family={Sicilia},
+           familyi={S\bibinitperiod},
+           given={Anthony},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=ed54f3a69b0757128779d4610f208986}{%
+           family={Tomz},
+           familyi={T\bibinitperiod},
+           given={Michael\bibnamedelima R.},
+           giveni={M\bibinitperiod\bibinitdelim R\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=2214edb8305f7ccd7cdc310b3a8ae1b4}{%
+           family={Manning},
+           familyi={M\bibinitperiod},
+           given={Christopher\bibnamedelima D.},
+           giveni={C\bibinitperiod\bibinitdelim D\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=547c1372a2fb93233920b7025d9ce348}{%
+           family={Shi},
+           familyi={S\bibinitperiod},
+           given={Weiyan},
+           giveni={W\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{71efd4cab3eed98fac5b4cb12462dbf4}
+      \strng{fullhash}{6178feb489ae6e224571010746e7665c}
+      \strng{fullhashraw}{6178feb489ae6e224571010746e7665c}
+      \strng{bibnamehash}{71efd4cab3eed98fac5b4cb12462dbf4}
+      \strng{authorbibnamehash}{71efd4cab3eed98fac5b4cb12462dbf4}
+      \strng{authornamehash}{71efd4cab3eed98fac5b4cb12462dbf4}
+      \strng{authorfullhash}{6178feb489ae6e224571010746e7665c}
+      \strng{authorfullhashraw}{6178feb489ae6e224571010746e7665c}
+      \field{sortinit}{Z}
+      \field{sortinithash}{96892c0b0a36bb8557c40c49813d48b3}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{arXiv preprint arXiv:2510.01171}
+      \field{note}{Version 3, Oktober 2025}
+      \field{title}{Verbalized Sampling: How to Mitigate Mode Collapse and Unlock {LLM} Diversity}
+      \field{year}{2025}
+      \verb{urlraw}
+      \verb https://arxiv.org/abs/2510.01171
+      \endverb
+      \verb{url}
+      \verb https://arxiv.org/abs/2510.01171
+      \endverb
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+
