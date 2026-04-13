@@ -93,8 +93,8 @@
     \textbf{Autor:}        & Paul Baselt \\
     \textbf{Kontakt:}      & \href{mailto:baselt@uni-mainz.de}{baselt@uni-mainz.de} \\
     \textbf{Institution:}  & Johannes Gutenberg-Universität Mainz \\
-    \textbf{Status:}       & Entwurf / Machbarkeitsnachweis \\
-    \textbf{Version:}      & 1.0 \\
+    \textbf{Status:}       & In Entwicklung \\
+    \textbf{Version:}      & 1.1 \\
     \textbf{Datum:}        & \today \\
   \end{tabular}
 
@@ -113,7 +113,9 @@
 % -----------------------------------------------------------
 \section{Zusammenfassung}
 
-Dieses Konzeptpapier beschreibt die Entwicklung und den Einsatz einer KI-basierten Web-Anwendung (»Verwaltungsagent«) für die Johannes Gutenberg-Universität Mainz. Die Anwendung ermöglicht Mitarbeiterinnen und Mitarbeitern einen niedrigschwelligen Zugang zu den KI-Services der Universität über eine benutzerfreundliche Oberfläche. Vorgefertigte Aufgabenvorlagen (Agenten) reduzieren den Aufwand für die Formulierung von Prompts und erhöhen die Qualität der KI-Antworten für typische Verwaltungsaufgaben. Die vorliegende Version ist als Machbarkeitsnachweis konzipiert und bildet die Grundlage für eine mögliche institutionelle Weiterentwicklung.
+Dieses Konzeptpapier beschreibt die Entwicklung und den Einsatz einer KI-basierten Web-Anwendung (»Verwaltungsagent«) für die Johannes Gutenberg-Universität Mainz. Die Anwendung ermöglicht Mitarbeiterinnen und Mitarbeitern einen niedrigschwelligen Zugang zu den KI-Services der Universität über eine benutzerfreundliche Oberfläche. Vorgefertigte Aufgabenvorlagen (Agenten) reduzieren den Aufwand für die Formulierung von Prompts und erhöhen die Qualität der KI-Antworten für typische Verwaltungsaufgaben.
+
+Version~1.1 erweitert den ursprünglichen Machbarkeitsnachweis um zwei wesentliche Komponenten: einen PHP-basierten CORS-Proxy, der den Betrieb auf Standard-Webservern ohne Node.js ermöglicht, sowie eine erste Implementierung der datenbankgestützten Prompt-Bibliothek auf Basis von MariaDB. Damit ist die Anwendung erstmals ohne lokale Entwicklungsumgebung auf universitären Webservern deploybar.
 
 % -----------------------------------------------------------
 % 2. Motivation und Problemstellung
@@ -215,83 +217,46 @@ Die Anwendung stellt sechs spezialisierte Agenten bereit, die für häufige Verw
 \end{itemize}
 
 % -----------------------------------------------------------
-% 5. Konzept: Prompt-Bibliothek
+% 5. Prompt-Bibliothek
 % -----------------------------------------------------------
-\section{Konzept: Prompt-Bibliothek}
+\section{Prompt-Bibliothek}
 
 \subsection{Motivation}
 
-Die aktuelle Implementierung bietet sechs fest kodierte Agenten mit unveränderlichen Prompts. Für den Praxiseinsatz in der Hochschulverwaltung ist jedoch eine größere Flexibilität notwendig: Mitarbeitende in verschiedenen Dezernaten haben unterschiedliche Anforderungen, bevorzugte Formulierungen und wiederkehrende Aufgaben, die sich nicht durch ein einheitliches Prompt-Set abdecken lassen. Gleichzeitig belegen \textcite{sahoo2024survey} und \textcite{schulhoff2025promptreport}, dass gut strukturierte, aufgabenspezifische Prompts die Qualität von KI-Ausgaben erheblich verbessern. Die Erweiterung um eine persönliche und institutionelle Prompt-Bibliothek ist daher ein zentraler nächster Entwicklungsschritt.
+Die Basisimplementierung bietet sechs fest kodierte Agenten mit unveränderlichen Prompts. Für den Praxiseinsatz in der Hochschulverwaltung ist jedoch eine größere Flexibilität notwendig: Mitarbeitende in verschiedenen Dezernaten haben unterschiedliche Anforderungen, bevorzugte Formulierungen und wiederkehrende Aufgaben, die sich nicht durch ein einheitliches Prompt-Set abdecken lassen. Gleichzeitig belegen \textcite{sahoo2024survey} und \textcite{schulhoff2025promptreport}, dass gut strukturierte, aufgabenspezifische Prompts die Qualität von KI-Ausgaben erheblich verbessern.
 
-\subsection{Zweistufiges Bibliotheksmodell}
+\subsection{Implementierter Stand (v1.1)}
 
-Das Konzept sieht zwei Ebenen von Prompt-Sammlungen vor, die sich ergänzen:
+Mit Version~1.1 wurde die erste Ausbaustufe der Prompt-Bibliothek realisiert. Die Architektur basiert direkt auf \textbf{Stufe~3} (server-seitige Datenbank), da die Anwendung im Zuge der PHP-Migration ohnehin auf einen Webserver mit MariaDB-Anbindung ausgerichtet wurde. Die ursprünglich für den Prototyp vorgesehene IndexedDB-Lösung wurde damit übersprungen.
 
-\begin{description}[leftmargin=1.5cm, style=nextline]
-  \item[Institutionelle Bibliothek (schreibgeschützt)]
-    Zentral verwaltete, erprobte Prompts für hochschulweite Standardaufgaben. Diese werden durch Administratoren gepflegt und stehen allen Nutzenden zur Verfügung. Nutzende können diese Prompts als Vorlage in ihre persönliche Bibliothek übernehmen und dort anpassen.
-  \item[Persönliche Bibliothek (vollständig bearbeitbar)]
-    Individuelle Prompt-Sammlung je Nutzerin bzw. Nutzer. Eigene Prompts können neu erstellt, aus der institutionellen Bibliothek kopiert, bearbeitet, kategorisiert, exportiert und gelöscht werden.
-\end{description}
+Das Datenbankschema umfasst zwei Tabellen:
 
-\subsection{Prompt-Template-Struktur}
+\begin{itemize}[leftmargin=1.5cm]
+  \item \textbf{\texttt{kategorien}}: Thematische Gruppen (z.\,B.\ Texte, Kommunikation, Analyse, Code) mit Bezeichnung, Beschreibung und Anzeigefarbe.
+  \item \textbf{\texttt{prompts}}: Prompt-Einträge mit Titel, Beschreibung, Kategorie-Zuordnung, Modelltyp (\texttt{standard}, \texttt{reasoning}, \texttt{code}, \texttt{vision}), System-Prompt-Text und Platzhalterhinweis.
+\end{itemize}
 
-Prompts werden als Templates mit variablen Platzhaltern gespeichert. Vor dem Absenden werden die Platzhalter durch ein dynamisches Formular befüllt. Ein Prompt-Datensatz enthält folgende Felder:
+Der Zugriff erfolgt über eine PHP-REST-API (\texttt{api\_prompts.php}), die Volltextsuche (MariaDB FULLTEXT-Index) und Kategoriefilterung unterstützt.
 
-\begin{table}[h]
-  \centering
-  \begin{tabular}{llp{7.5cm}}
-    \toprule
-    \textbf{Feld} & \textbf{Typ} & \textbf{Beschreibung} \\
-    \midrule
-    \texttt{id}          & String (UUID) & Eindeutige Kennung \\
-    \texttt{name}        & String        & Anzeigename des Prompts \\
-    \texttt{kategorie}   & String        & Thematische Gruppe (z.\,B.\ Kommunikation, Analyse) \\
-    \texttt{template}    & String        & Prompt-Text mit Platzhaltern (\texttt{\{\{Variable\}\}}) \\
-    \texttt{variablen}   & Array         & Liste der enthaltenen Platzhalter-Namen \\
-    \texttt{quelle}      & Enum          & \texttt{institutionell} oder \texttt{persönlich} \\
-    \texttt{erstellt\_am} & Datum        & Erstellungsdatum \\
-    \bottomrule
-  \end{tabular}
-  \caption{Datenstruktur eines Prompt-Templates}
-\end{table}
-
-\noindent\textbf{Beispiel:} Ein Template für mehrsprachige E-Mails könnte lauten:
-\begin{quote}
-  \textit{»Schreibe eine \texttt{\{\{Tonalität\}\}} E-Mail auf \texttt{\{\{Sprache\}\}} über folgenden Sachverhalt: \texttt{\{\{Inhalt\}\}}«}
-\end{quote}
-Beim Aufruf dieses Prompts erscheint ein Formular mit drei Feldern (\textit{Tonalität}, \textit{Sprache}, \textit{Inhalt}), das der Nutzer ausfüllt, bevor der fertige Prompt an das Modell gesendet wird.
-
-\subsection{Nutzer-Workflow}
-
-Der Ablauf aus Nutzerperspektive gliedert sich in vier Schritte:
+\subsection{Nutzer-Workflow (implementiert)}
 
 \begin{enumerate}[leftmargin=1.5cm]
-  \item \textbf{Auswählen:} Nutzende wählen einen Prompt aus der institutionellen oder persönlichen Bibliothek -- gefiltert nach Kategorie oder per Freitextsuche.
-  \item \textbf{Anpassen (optional):} Platzhalter werden in einem dynamisch generierten Formular befüllt. Der resultierende Prompt ist vor dem Absenden noch manuell editierbar.
-  \item \textbf{Absenden:} Der fertige Prompt wird wie bisher an das gewählte Modell über die JGU-API gesendet.
-  \item \textbf{Speichern (optional):} Nutzende können den angepassten Prompt unter einem eigenen Namen in ihrer persönlichen Bibliothek speichern.
+  \item \textbf{Öffnen:} Über den Button »Prompt-Bibliothek« in der Hauptseite wird \texttt{prompt\_bibliothek.html} aufgerufen.
+  \item \textbf{Suchen und Filtern:} Prompts können per Freitextsuche und Kategorie-Dropdown gefiltert werden. Die Suche verwendet einen 300\,ms-Debounce für ein reaktionsschnelles Erlebnis.
+  \item \textbf{Übernehmen:} Ein Klick auf »Übernehmen \& anpassen« überträgt den System-Prompt via \texttt{localStorage} in das Eingabefeld der Hauptseite. Die Datenbank bleibt unverändert.
+  \item \textbf{Anpassen und Absenden:} Der übernommene Prompt kann frei bearbeitet werden, bevor er an das Modell gesendet wird.
 \end{enumerate}
 
-\subsection{Technische Umsetzungsoptionen}
+\subsection{Geplante Erweiterungen der Bibliothek}
 
-Die Speicherung der persönlichen Bibliothek kann in drei Ausbaustufen erfolgen:
-
-\begin{table}[h]
-  \centering
-  \begin{tabular}{lp{3.5cm}p{6cm}}
-    \toprule
-    \textbf{Stufe} & \textbf{Technologie} & \textbf{Eigenschaften} \\
-    \midrule
-    1 & \texttt{localStorage} / \texttt{IndexedDB} & Kein Server erforderlich; Daten nur im Browser; geeignet als erster Prototyp \\
-    2 & Lokale JSON-Datei (Export/Import) & Portabilität zwischen Geräten; manueller Austausch möglich \\
-    3 & Server-seitige Datenbank (z.\,B.\ SQLite, PostgreSQL) & Geräteübergreifend; Teilen von Prompts; Rechteverwaltung; Integration in JGU-Infrastruktur \\
-    \bottomrule
-  \end{tabular}
-  \caption{Speicheroptionen für die persönliche Prompt-Bibliothek}
-\end{table}
-
-\noindent Für den Machbarkeitsnachweis wird \textbf{Stufe 1} (IndexedDB im Browser) empfohlen, da sie ohne Serverinfrastruktur auskommt und dennoch größere Datenmengen als \texttt{localStorage} verwalten kann. Eine Migration zu Stufe 3 ist zu einem späteren Zeitpunkt möglich, ohne die Kernlogik zu verändern.
+\begin{description}[leftmargin=1.5cm, style=nextline]
+  \item[Verwaltungsoberfläche]
+    Ein Admin-Bereich zum Anlegen, Bearbeiten und Löschen von Prompts und Kategorien direkt im Browser, ohne Datenbankzugriff.
+  \item[Zweistufiges Bibliotheksmodell]
+    Trennung in eine schreibgeschützte institutionelle Bibliothek (zentral gepflegt) und eine persönliche Bibliothek je Nutzerin bzw. Nutzer (frei bearbeitbar).
+  \item[Template-Platzhalter]
+    Prompts mit variablen Feldern (\texttt{\{\{Variable\}\}}), die vor dem Absenden durch ein dynamisches Formular befüllt werden. Beispiel: \textit{»Schreibe eine \texttt{\{\{Tonalität\}\}} E-Mail auf \texttt{\{\{Sprache\}\}}…«}
+\end{description}
 
 % -----------------------------------------------------------
 % 6. Technische Architektur
@@ -300,20 +265,49 @@ Die Speicherung der persönlichen Bibliothek kann in drei Ausbaustufen erfolgen:
 
 \subsection{Systemkomponenten}
 
-Die Anwendung besteht aus drei Hauptkomponenten:
+Die Anwendung besteht ab Version~1.1 aus vier Hauptkomponenten:
 
 \begin{enumerate}[leftmargin=1.5cm]
-  \item \textbf{Frontend} (\texttt{JGU\_Agenten.html}, \texttt{app.js}, \texttt{styles.css}): Browserbasierte Benutzeroberfläche ohne externe Framework-Abhängigkeiten.
-  \item \textbf{CORS-Proxy} (\texttt{proxy-server.js}): Lokaler Node.js-Server, der Browser-Sicherheitsrestriktionen (CORS) umgeht und API-Anfragen weiterleitet.
+  \item \textbf{Frontend} (\texttt{JGU\_Agenten.html}, \texttt{prompt\_bibliothek.html}, \texttt{app.js}, \texttt{styles.css}): Browserbasierte Benutzeroberfläche ohne externe Framework-Abhängigkeiten.
+  \item \textbf{CORS-Proxy}: Leitet API-Anfragen an \texttt{ki-chat.uni-mainz.de} weiter und setzt die erforderlichen CORS-Header. Zwei Betriebsmodi werden unterstützt:
+    \begin{itemize}
+      \item \texttt{proxy.php} -- PHP-Skript für den Betrieb auf Standard-Webservern (primär)
+      \item \texttt{proxy-server.js} -- Node.js-Server für die lokale Entwicklung (alternativ)
+    \end{itemize}
+    Die Anwendung erkennt beim Start automatisch, welcher Proxy verfügbar ist.
+  \item \textbf{Prompt-Bibliothek-Backend} (\texttt{api\_prompts.php}, \texttt{db\_config.php}): PHP-REST-API mit MariaDB-Anbindung für die Verwaltung und Auslieferung von Prompt-Templates.
   \item \textbf{KI-API der JGU}: \href{https://ki-chat.uni-mainz.de/api}{ki-chat.uni-mainz.de/api} -- die universitätseigene KI-Infrastruktur (OpenAI-kompatibel).
 \end{enumerate}
+
+\subsection{Datenbankschema}
+
+\begin{table}[h]
+  \centering
+  \begin{tabular}{llp{7cm}}
+    \toprule
+    \textbf{Tabelle} & \textbf{Feld} & \textbf{Beschreibung} \\
+    \midrule
+    \texttt{kategorien} & \texttt{id}, \texttt{name}, \texttt{beschreibung}, \texttt{farbe} & Thematische Gruppen mit Anzeigefarbe \\
+    \addlinespace
+    \texttt{prompts} & \texttt{id}, \texttt{titel}, \texttt{beschreibung} & Bezeichnung und Kurzbeschreibung \\
+                     & \texttt{kategorie\_id} & Fremdschlüssel zu \texttt{kategorien} \\
+                     & \texttt{modell\_typ} & \texttt{standard}, \texttt{reasoning}, \texttt{code}, \texttt{vision} \\
+                     & \texttt{system\_prompt} & Vollständiger Prompt-Text \\
+                     & \texttt{platzhalter} & Hinweistext für das Eingabefeld \\
+                     & \texttt{aktiv} & Soft-Delete-Flag \\
+    \bottomrule
+  \end{tabular}
+  \caption{MariaDB-Datenbankschema der Prompt-Bibliothek}
+\end{table}
 
 \subsection{Voraussetzungen}
 
 \begin{itemize}[leftmargin=1.5cm]
-  \item Node.js (v14 oder höher) für den Proxy-Server
+  \item PHP (v7.4 oder höher) mit den Erweiterungen \texttt{php-curl} und \texttt{php-mysqlnd}
+  \item MariaDB (v10.5 oder höher)
   \item Moderner Webbrowser (Chrome, Firefox, Edge)
   \item API-Key von \href{https://ki-chat.uni-mainz.de}{ki-chat.uni-mainz.de}
+  \item Node.js optional (nur für lokale Entwicklung ohne PHP)
 \end{itemize}
 
 % -----------------------------------------------------------
@@ -338,18 +332,23 @@ Die Anwendung besteht aus drei Hauptkomponenten:
 \begin{itemize}[leftmargin=1.5cm]
   \item[$\checkmark$] Dynamische Modell-Auswahl
   \item[$\checkmark$] Debug-Logging-System
-  \item[$\checkmark$] CORS-Proxy-Lösung
+  \item[$\checkmark$] CORS-Proxy-Lösung (Node.js)
   \item[$\checkmark$] Start-Skripte für Windows und Linux/macOS
   \item[$\checkmark$] PDF-Textextraktion via PDF.js
+  \item[$\checkmark$] PHP-CORS-Proxy für Webserver-Deployment (\texttt{proxy.php})
+  \item[$\checkmark$] Automatische Proxy-Erkennung (PHP vs.\ Node.js)
+  \item[$\checkmark$] Prompt-Bibliothek: Datenbankschema (MariaDB), REST-API, Such- und Filteroberfläche, Prompt-Übernahme in die Hauptseite
 \end{itemize}
 
 \subsection{Geplante Erweiterungen}
 
 \begin{itemize}[leftmargin=1.5cm]
-  \item \textbf{Prompt-Bibliothek} (persönlich + institutionell) mit Template-System und Platzhaltern (siehe Abschnitt~5)
+  \item Prompt-Bibliothek: Verwaltungsoberfläche (Anlegen, Bearbeiten, Löschen ohne direkten DB-Zugriff)
+  \item Prompt-Bibliothek: Zweistufiges Modell (institutionell / persönlich) mit Nutzerauthentifizierung
+  \item Prompt-Bibliothek: Template-Platzhalter mit dynamischem Formular
   \item Download der Antworten als Word- oder PDF-Dokument
   \item DOCX-Dateiverarbeitung
-  \item Chunking für große Dokumente (statt Kürzung)
+  \item Chunking für große Dokumente (statt Kürzung auf 12.000 Zeichen)
   \item Streaming-Support für schnellere Antwortanzeige
   \item Dark Mode
 \end{itemize}
@@ -359,7 +358,9 @@ Die Anwendung besteht aus drei Hauptkomponenten:
 % -----------------------------------------------------------
 \section{Fazit}
 
-Die entwickelte Web-Anwendung demonstriert, dass eine benutzerfreundliche Oberfläche für die KI-Services der JGU mit geringem technischem Aufwand realisierbar ist. Der Machbarkeitsnachweis zeigt das Potenzial für eine breitere institutionelle Nutzung. Eine Weiterentwicklung in Richtung produktiver Einsatz erfordert die Einbindung der zuständigen Stellen (ZDV, Datenschutzbeauftragter) sowie eine systematische Bedarfserhebung bei den Zielgruppen in der Verwaltung.
+Die entwickelte Web-Anwendung demonstriert, dass eine benutzerfreundliche Oberfläche für die KI-Services der JGU mit geringem technischem Aufwand realisierbar und auf Standard-Webservern betreibbar ist. Version~1.1 geht über den reinen Machbarkeitsnachweis hinaus: Mit dem PHP-Deployment und der ersten Ausbaustufe der Prompt-Bibliothek auf Basis von MariaDB ist die Anwendung erstmals ohne lokale Entwicklungsumgebung auf universitärer Infrastruktur einsetzbar.
+
+Die nächsten Entwicklungsschritte -- insbesondere die Verwaltungsoberfläche für die Prompt-Bibliothek und das zweistufige Bibliotheksmodell -- bilden die Grundlage für einen breiteren institutionellen Rollout. Eine Weiterentwicklung in Richtung produktiver Einsatz erfordert weiterhin die Einbindung der zuständigen Stellen (ZDV, Datenschutzbeauftragter) sowie eine systematische Bedarfserhebung bei den Zielgruppen in der Verwaltung.
 
 % -----------------------------------------------------------
 % Literatur

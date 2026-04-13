@@ -14,11 +14,9 @@ const APP_STATE = {
         code: null,
         vision: null
     },
-    // API-Konfiguration
-    // WICHTIG: Für lokale Entwicklung verwenden Sie den Proxy-Server!
-    // Siehe PROXY_ANLEITUNG.md für Details
-    apiBaseUrl: 'http://localhost:3000/api',  // Proxy-Server (Entwicklung)
-    // apiBaseUrl: 'https://ki-chat.uni-mainz.de/api',  // Direkt (funktioniert nicht wegen CORS!)
+    // API-Konfiguration – wird beim Start automatisch erkannt (siehe detectApiProxy)
+    // Priorität: 1. proxy.php (PHP-Server), 2. localhost:3000 (Node.js), 3. Fallback
+    apiBaseUrl: null,  // wird in initializeApp() gesetzt
     agents: {
         summary: {
             modelType: "standard",
@@ -330,11 +328,46 @@ function useFallbackModels() {
 }
 
 // Initialize App
+/**
+ * Erkennt automatisch den verfügbaren Proxy:
+ * 1. proxy.php im selben Verzeichnis (PHP-Server)
+ * 2. localhost:3000 (Node.js Proxy)
+ * 3. Kein Proxy gefunden → gibt null zurück
+ */
+async function detectApiProxy() {
+    // 1. PHP-Proxy: probe mit einem harmlosen HEAD-Request
+    try {
+        const phpProxyUrl = window.location.origin + window.location.pathname.replace(/\/[^/]*$/, '') + '/proxy.php?path=/api/models';
+        const res = await fetch(phpProxyUrl, { method: 'HEAD', signal: AbortSignal.timeout(2000) });
+        // Jede Antwort (auch 401/403) bedeutet: Proxy erreichbar
+        if (res.status !== 0) {
+            Logger.info('Proxy-Erkennung: PHP-Proxy gefunden → ' + phpProxyUrl.replace('?path=/api/models', ''));
+            return window.location.origin + window.location.pathname.replace(/\/[^/]*$/, '') + '/proxy.php?path=/api';
+        }
+    } catch (_) { /* nicht verfügbar */ }
+
+    // 2. Node.js Proxy auf localhost:3000
+    try {
+        const res = await fetch('http://localhost:3000/api/models', { method: 'HEAD', signal: AbortSignal.timeout(1500) });
+        if (res.status !== 0) {
+            Logger.info('Proxy-Erkennung: Node.js-Proxy gefunden → http://localhost:3000/api');
+            return 'http://localhost:3000/api';
+        }
+    } catch (_) { /* nicht verfügbar */ }
+
+    Logger.warning('Proxy-Erkennung: Kein Proxy erreichbar – API-Calls werden wahrscheinlich durch CORS blockiert');
+    return null;
+}
+
 window.onload = async function() {
     Logger.info('🚀 Anwendung wird initialisiert...');
     try {
+        // Proxy automatisch erkennen
+        APP_STATE.apiBaseUrl = await detectApiProxy() || 'http://localhost:3000/api';
+        Logger.info('API-Basis-URL: ' + APP_STATE.apiBaseUrl);
+
         loadApiKey();
-        setupLogoErrorHandler();
+        loadPromptFromLibrary();
 
         // Lade verfügbare Modelle NUR wenn API-Key vorhanden
         if (APP_STATE.apiKey) {
@@ -1157,13 +1190,35 @@ function showAlert(message, type) {
     }, 5000);
 }
 
-function setupLogoErrorHandler() {
-    const logo = document.getElementById('logoImg');
-    if (logo) {
-        logo.onerror = function() {
-            Logger.warning('Logo konnte nicht geladen werden');
-            this.style.display = 'none';
-        };
-        Logger.debug('Logo Error-Handler eingerichtet');
+
+/**
+ * Prüft beim Start ob ein Prompt aus der Bibliothek übernommen wurde.
+ * Der Prompt wird via localStorage übergeben und danach gelöscht.
+ */
+function loadPromptFromLibrary() {
+    const raw = localStorage.getItem('bibliothek_prompt');
+    if (!raw) return;
+
+    try {
+        const data = JSON.parse(raw);
+        localStorage.removeItem('bibliothek_prompt');
+
+        // System-Prompt in das Eingabefeld laden
+        const inputArea = document.getElementById('inputArea');
+        if (inputArea) {
+            inputArea.value = data.system_prompt || '';
+            inputArea.classList.remove('placeholder');
+        }
+
+        // Platzhaltertext setzen falls vorhanden
+        if (data.platzhalter && inputArea) {
+            inputArea.placeholder = data.platzhalter;
+        }
+
+        showAlert(`Prompt "${data.titel}" aus der Bibliothek übernommen – jetzt anpassen und starten.`, 'success');
+        Logger.info('Prompt aus Bibliothek geladen: ' + data.titel);
+    } catch (e) {
+        Logger.warning('Konnte Bibliotheks-Prompt nicht laden', e);
+        localStorage.removeItem('bibliothek_prompt');
     }
 }
